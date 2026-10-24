@@ -6,7 +6,8 @@ Built for **Qiskit Fall Fest 2026 Warsaw**, Track 3: quantum games.
 
 | | |
 |---|---|
-| Game | React + TypeScript in [`web/`](web/), plays instantly in the browser |
+| Game | React + TypeScript in [`web/`](web/), plays instantly in the browser: **https://ghost.yogourt.dev** |
+| Online group play | A room of phones votes where to shine the flashlight; the ghost lives in a self-hosted [Convex](https://convex.dev) backend ([`web/convex/`](web/convex/)) |
 | Quantum walk | Qiskit module [`quantum_walk.py`](quantum_walk.py) |
 | Real hardware | [`run_on_ibm.py`](run_on_ibm.py), two jobs on ibm_kingston, every shot saved in [`hardware/`](hardware/) |
 | Tutorial notebook | [`ghost_walk_tutorial.ipynb`](ghost_walk_tutorial.ipynb): build the ghost, the flashlight and the hardware circuit step by step |
@@ -18,15 +19,27 @@ Built for **Qiskit Fall Fest 2026 Warsaw**, Track 3: quantum games.
 
 A ghost hides in a corridor of 16 rooms that loops back on itself. It is a quantum ghost: it is not in one room but spread over many, it moves like a wave, and its waves can cancel each other out. You have four flashlights.
 
-1. **Read the ghosts.** Each room shows your exact chance of catching the ghost there. The ghost started in room 8 and has already taken three steps.
+1. **Read the ghosts.** Each room shows your exact chance of catching the ghost there. The ghost started in room 8 and has already taken seven steps.
 2. **Search a room.** Click it. If the ghost is there, you win. If not, that room empties and every other room grows, because the ghost must be somewhere else.
 3. **Watch it move.** The ghost steps one room left and one room right at the same time. Where its waves meet they add up or cancel, so the next picture is not what a coin-flipping ghost would give.
 4. Run out of flashlights and the ghost escapes.
 
 The player never sees a circuit or an equation. Qiskit is the physics engine underneath.
 
+**Tuned to be winnable, but not by luck.** A simulation over the game's own engine ([`web/scripts/simulate.ts`](web/scripts/simulate.ts), `npm run simulate`) plays every hunt exactly for "always search the most likely room" and 200 000 times at random:
+
+| Rules | Quantum: best room | Quantum: random room* | Coin-flip: best room | Coin-flip: random room* |
+|---|---|---|---|---|
+| Before: 4 flashlights, 3 warm-up steps | 88.3 % | 62.8 % | 81.3 % | 63.0 % |
+| **Now: 4 flashlights, 7 warm-up steps** | **64.0 %** | **41.3 %** | **68.5 %** | **41.3 %** |
+
+\* a random room that can still hold the ghost; any of the 16 rooms at random wins 23 %.
+
+With three warm-up steps the ghost sat in only four rooms, so good play nearly always won and the choices hardly mattered. After seven steps it covers eight rooms, the quantum ghost already shows its two peaks running apart, good play wins about two hunts in three, and it beats random play by 23 points. More flashlights were not the fix: at 3 warm-up steps even 4 flashlights win 88 % for good play. The quantum ghost is now the harder one (64 % against 68.5 %), because it runs away faster. Solo and group play use the same rules ([`web/src/game/rules.ts`](web/src/game/rules.ts)).
+
 **Also in the game**
 
+- **Play online** (top right): the hunt as a room vote, built for a showcase. The big screen shows a QR code, a four-digit game code and the ring with live vote counts; 30–100 people join on their phones and vote for the room to search each turn. When the countdown ends (or the host closes the vote) the most-voted room gets the flashlight, a tie is drawn at random, and the ghost steps. The ghost's amplitudes, every flashlight and every random roll live on the server, so every screen sees the same ghost and nobody can cheat from a phone. Details in [web/README.md](web/README.md#online-group-play).
 - **Tutorial** (`#/tutorial`): seven short screens. The ghost starts alone in room 1, splits left and right, and at step four the waves cancel. Ends with a practice flashlight.
 - **Quantum / coin-flip toggle**: the same hunt with a classical random-walk ghost, so players can feel the difference.
 - **Fog**: hides the chances, so you have to predict where the waves went.
@@ -81,6 +94,10 @@ npm run dev
 ```
 
 Open http://localhost:5173. `npm run build` writes a static site to `web/dist/` that can be hosted anywhere.
+
+### Play online (group mode)
+
+Needs a Convex backend. Locally, in `web/`: `npx convex dev` (choose to run Convex locally, no account needed), then `npm run dev` in a second terminal, and click **Play online**. Open the join link on another device or tab. The live site runs on a self-hosted Convex; setup and redeploy (`npm run deploy`) are in [web/README.md](web/README.md).
 
 ### Python: the walk, the notebook, a local noisy run
 
@@ -144,9 +161,13 @@ hardware/
   job_fake.json, results_fake.json       same pipeline on a local noisy FakeTorino
 web/                         the game and in-app docs (React, Vite, TypeScript)
   src/engine/walk.ts         the quantum walk and the flashlight measurement
+  src/game/rules.ts          flashlights, warm-up steps, vote times: shared by solo, group play and the simulation
   src/game/hunt.ts           turn logic and "what happened" explanations
-  src/views/                 start screen, hunt, tutorial, docs, real-chip round
+  src/views/                 start screen, hunt, tutorial, docs, real-chip round, host screen, phone
+  src/online/                Convex client, Play online button, saved seats
   src/data/chip.json         real-chip results, synced from hardware/ by npm run sync-data
+  convex/                    group play on the server: schema, game codes, votes, the turn engine, expiry
+  scripts/                   simulate.ts (win rates), codes-test.ts, crowd-test.ts (100 phones), deploy.mjs
 docs/
   how-it-works.md            the physics and the circuits
   real-chip.md               the hardware run: method, results, lessons
@@ -166,7 +187,9 @@ ghost-walk.md                the plan written at the start of the hackathon
 | Real-chip run and real-chip round | done, two jobs on ibm_kingston |
 | Tutorial notebook | done |
 | Noise slider (simulator with a real chip's noise model) | not built; the real-chip section shows measured noise instead |
-| 2-player mode, 2D mansion, Polish translation, audience voting | not built |
+| Audience voting (online group play, QR join, server-side ghost) | done, live at https://ghost.yogourt.dev |
+| Rules tuned by simulation | done: 7 warm-up steps, good play wins 64–68.5 % |
+| 2-player mode, 2D mansion, Polish translation | not built |
 
 ## Related work
 

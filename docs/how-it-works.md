@@ -11,7 +11,8 @@ Contents
 5. [Making the step fit on a real chip](#5-making-the-step-fit-on-a-real-chip)
 6. [Why the game runs in the browser](#6-why-the-game-runs-in-the-browser)
 7. [The game loop](#7-the-game-loop)
-8. [Where things are in the code](#8-where-things-are-in-the-code)
+8. [Group play: the ghost on a server](#8-group-play-the-ghost-on-a-server)
+9. [Where things are in the code](#9-where-things-are-in-the-code)
 
 ---
 
@@ -169,7 +170,7 @@ The real chip is used where it makes sense: a pre-recorded finale that uses its 
 [`web/src/game/hunt.ts`](../web/src/game/hunt.ts) is a reducer with four phases:
 
 ```
-start: 16 rooms, ghost in room 8, 3 warm-up steps, 4 flashlights
+start: 16 rooms, ghost in room 8, 7 warm-up steps, 4 flashlights
 
 aim     player clicks room r, roll = Math.random()
           roll < P(r)  -> project onto room r -> won
@@ -179,13 +180,38 @@ reveal  after 1.3 s:
           none left        -> draw a room from P, project onto it -> lost
 ```
 
+**Why 7 warm-up steps.** The rules live in [`web/src/game/rules.ts`](../web/src/game/rules.ts) and were tuned with [`web/scripts/simulate.ts`](../web/scripts/simulate.ts), which plays the same engine. "Always search the most likely room" is computed exactly (a miss is deterministic, so only ties branch); random play is 200 000 games per cell.
+
+| Rules | Quantum: best room | Quantum: random room | Coin-flip: best room | Coin-flip: random room |
+|---|---|---|---|---|
+| 4 flashlights, 3 warm-up steps (before) | 88.3 % | 62.8 % | 81.3 % | 63.0 % |
+| 4 flashlights, 7 warm-up steps (now) | 64.0 % | 41.3 % | 68.5 % | 41.3 % |
+
+"Random room" picks among rooms that can still hold the ghost; any room at random wins 23 %. After three steps the ghost is in only four rooms (⅛ ⅜ ⅜ ⅛, the same for both ghosts), so good play almost always won. After seven it covers eight rooms and the quantum ghost has already split into two peaks running apart (21 % at rooms 3 and 13, 10 % at rooms 7 and 9; the coin-flipping ghost peaks at 27 % in the middle). Good play now wins about two hunts in three, beats random play by 23 points, and the quantum ghost is the harder one. Adding flashlights instead would have made the game easier still.
+
 **"What happened" text.** After each step the game compares the new chances with what a coin-flipping ghost would make from the same chances one step earlier (`classicalStep`). It picks the room with the largest gap. Below a 7-point gap it just says the ghost stepped both ways; otherwise it reports where waves cancelled or added up, with both numbers. This isolates the effect of interference in that one step, including after the flashlight has reshaped the ghost.
 
 **Tutorial.** [`TutorialView.tsx`](../web/src/views/TutorialView.tsx) starts the ghost alone in room 1 with no warm-up, shows the left/right split with arrows, offers the coin-flip comparison at step four, and ends with a practice flashlight.
 
 **Real-chip round.** [`ChipView.tsx`](../web/src/views/ChipView.tsx) loads the saved ibm_kingston results ([`web/src/data/chip.json`](../web/src/data/chip.json)). The player's one flashlight is checked against a room drawn from the chip's 2000 measured shots for the 8-room, 5-step circuit.
 
-## 8. Where things are in the code
+## 8. Group play: the ghost on a server
+
+**Play online** runs the same hunt for a room of people: a big screen (the host) and phones (the players). The ghost cannot live in any one browser, or each screen would roll its own outcome and anyone could edit theirs. It lives in a [Convex](https://convex.dev) backend, self-hosted next to the site.
+
+```
+host:   create game -> code (90% contain "67"), QR code -> release the ghost
+phone:  join by code -> vote for a room (one row per player per turn)
+server: vote closes (timer, or the host closes it early)
+          most votes wins, ties drawn at random, no votes -> random room
+          huntReducer(pick, roll = Math.random())   project onto / away from the room
+          caught -> round over, otherwise after 3.5 s:
+          huntReducer(advance, roll)                one walk step, next vote opens
+```
+
+The game document stores the hunt exactly as the reducer shapes it, including the four amplitude arrays of the ghost. Every flashlight, step and roll is a Convex mutation in [`web/convex/games.ts`](../web/convex/games.ts) that imports `walk.ts` and `hunt.ts`, so solo and group play are the same physics. Mutations are transactions: a vote that races the vote closing is either counted or refused, never moved to the next turn. Clients receive the chances P(k) and never the amplitudes, and there is no hidden "real room" to leak, because there is none until the flashlight shines.
+
+## 9. Where things are in the code
 
 | What | Python | Browser |
 |---|---|---|
@@ -195,3 +221,4 @@ reveal  after 1.3 s:
 | Exact chances | `ideal_probs` | `probs` |
 | Coin-flip ghost | `classical_probs` | `step` in classical mode, `classicalStep` |
 | Flashlight | `flashlight_circuit` in the notebook | `project` |
+| Group play | | `web/convex/games.ts` (server), `HostView`, `JoinView` |

@@ -1,11 +1,16 @@
 import { CSSProperties } from 'react'
 import { Ghost } from '../components/Ghost'
+import { LIGHTS, word } from '../game/rules'
+import { PlayOnlineButton } from '../online/PlayOnlineButton'
 
 const delay = (ms: number) => ({ '--d': `${ms}ms` }) as CSSProperties
 
 export function StartView() {
   return (
     <main className="start">
+      <div className="top-right">
+        <PlayOnlineButton />
+      </div>
       <div className="enter" style={delay(0)}>
         <div className="start-ghost" aria-hidden="true">
           <Ghost tone="quantum" />
@@ -15,7 +20,7 @@ export function StartView() {
         Ghost Walk
       </h1>
       <p className="start-lede enter" style={delay(300)}>
-        A quantum ghost is spread over sixteen rooms at once. Catch it before your four flashlights run out.
+        A quantum ghost is spread over sixteen rooms at once. Catch it before your {word(LIGHTS)} flashlights run out.
       </p>
       <div className="actions enter" style={delay(440)}>
         <a className="btn-plain" href="#/play">

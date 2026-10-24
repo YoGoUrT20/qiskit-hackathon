@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useState } from 'react'
 import { Corridor } from '../components/Corridor'
 import { Ghost } from '../components/Ghost'
 import { newGhost, probs } from '../engine/walk'
+import { cap, LIGHTS, WARMUP, word } from '../game/rules'
 import { ChipView } from './ChipView'
 
 const quantum4 = probs(newGhost('quantum', 16, 4))
@@ -101,7 +102,7 @@ export function DocsView() {
           </h2>
           <ol className="steps">
             <li>
-              <b>Read the ghosts.</b> The ghost started in room 8 and has already taken three steps. In each room, the bigger and brighter the
+              <b>Read the ghosts.</b> The ghost started in room 8 and has already taken {word(WARMUP)} steps. In each room, the bigger and brighter the
               ghost, the better your chance of catching it there. The number next to a room is that exact chance.
             </li>
             <li>
@@ -113,7 +114,12 @@ export function DocsView() {
               ever in odd rooms or only in even rooms.
             </li>
             <li>
-              <b>Four flashlights.</b> Run out and the ghost escapes. Fog mode hides the chances, so you have to predict where the waves went.
+              <b>{cap(word(LIGHTS))} flashlights.</b> Run out and the ghost escapes. Fog mode hides the chances, so you have to predict where the waves went.
+            </li>
+            <li>
+              <b>Play online.</b> The Play online button turns the hunt into a room vote: the big screen shows a QR code and a four-digit code,
+              everyone joins on their phone and votes for the room to search, and the most-voted room gets the flashlight. The ghost lives on the
+              server, so every screen sees the same one.
             </li>
           </ol>
         </section>

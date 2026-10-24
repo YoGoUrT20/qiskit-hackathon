@@ -3,8 +3,8 @@ import { Ghost } from '../components/Ghost'
 import { Ring } from '../components/Ring'
 import { Mode, pct, probs } from '../engine/walk'
 import { huntReducer, newHunt } from '../game/hunt'
-
-const LIGHTS = 4
+import { LIGHTS } from '../game/rules'
+import { PlayOnlineButton } from '../online/PlayOnlineButton'
 
 export function GameView() {
   const [mode, setMode] = useState<Mode>('quantum')
@@ -39,37 +39,48 @@ export function GameView() {
           <Ghost tone="quantum" className="wordmark-ghost" />
           Ghost Walk
         </a>
-        <a className="pill pill-small" href="#/docs">
-          Docs
-        </a>
+        <span className="corner-actions">
+          {/* on a narrow screen the button joins this row instead of sitting above the settings */}
+          <span className="only-stacked">
+            <PlayOnlineButton mode={mode} />
+          </span>
+          <a className="pill pill-small hide-narrow" href="#/docs">
+            Docs
+          </a>
+        </span>
       </div>
 
-      <section className="corner corner-tr panel-card" aria-label="Ghost settings">
-        <span className="card-label">Ghost</span>
-        <div className="tabs" role="tablist" aria-label="Ghost type">
-          {(['quantum', 'classical'] as const).map((m) => (
-            <button
-              key={m}
-              type="button"
-              role="tab"
-              aria-selected={mode === m}
-              className={mode === m ? 'is-on' : ''}
-              onClick={() => {
-                setMode(m)
-                restart(m)
-              }}
-            >
-              <Ghost tone={m} className="tab-ghost" />
-              {m === 'quantum' ? 'Quantum' : 'Coin-flip'}
-            </button>
-          ))}
-        </div>
-        <label className="switch">
-          <input type="checkbox" checked={fog} onChange={(e) => setFog(e.target.checked)} />
-          <span className="switch-track" aria-hidden="true" />
-          Fog: hide the chances
-        </label>
-      </section>
+      <div className="corner corner-tr corner-stack">
+        <span className="only-wide">
+          <PlayOnlineButton mode={mode} />
+        </span>
+        <section className="panel-card" aria-label="Ghost settings">
+          <span className="card-label">Ghost</span>
+          <div className="tabs" role="tablist" aria-label="Ghost type">
+            {(['quantum', 'classical'] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                role="tab"
+                aria-selected={mode === m}
+                className={mode === m ? 'is-on' : ''}
+                onClick={() => {
+                  setMode(m)
+                  restart(m)
+                }}
+              >
+                <Ghost tone={m} className="tab-ghost" />
+                {m === 'quantum' ? 'Quantum' : 'Coin-flip'}
+              </button>
+            ))}
+          </div>
+          <label className="switch">
+            <input type="checkbox" checked={fog} onChange={(e) => setFog(e.target.checked)} />
+            <span className="switch-track" aria-hidden="true" />
+            Fog: hide the chances
+          </label>
+        </section>
+      </div>
 
       <section className="game-stage" aria-label="The haunted corridor">
         <Ring

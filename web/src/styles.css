@@ -1356,6 +1356,274 @@ td {
   font-variant-numeric: tabular-nums;
 }
 
+/* group play: Play online button, host screen, phone */
+
+.top-right {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 2;
+  animation: fade 600ms ease-out 100ms both;
+}
+
+.corner-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.corner-stack > .panel-card {
+  align-self: stretch;
+}
+
+.corner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.only-stacked {
+  display: none;
+}
+
+@media (max-width: 1180px), (max-height: 700px) {
+  .only-stacked {
+    display: contents;
+  }
+
+  .only-wide {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .corner-tl .wordmark {
+    font-size: 20px;
+    white-space: nowrap;
+  }
+
+  .corner-tl .wordmark-ghost {
+    width: 18px;
+  }
+}
+
+/* the smallest phones: the docs stay one tap away in the How to play card */
+@media (max-width: 340px) {
+  .hide-narrow {
+    display: none;
+  }
+}
+
+.pill:disabled,
+.btn-plain:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.join-card {
+  align-items: center;
+  text-align: center;
+}
+
+.join-card .card-label {
+  align-self: flex-start;
+}
+
+.qr {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border-radius: 14px;
+  background: #fff;
+  line-height: 0;
+}
+
+.qr svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.join-code {
+  font: 400 64px/1 var(--display);
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+}
+
+.join-url {
+  color: var(--ink-2);
+  font-size: 15px;
+}
+
+.hunters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 184px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+}
+
+.hunters li {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 13px;
+  animation: fade 400ms ease-out both;
+}
+
+.hunters li.is-more {
+  color: var(--ink);
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.host .centre-sub {
+  font-size: 17px;
+}
+
+.centre-title.countdown {
+  font-size: clamp(48px, 7vw, 96px);
+  font-variant-numeric: tabular-nums;
+}
+
+/* vote badges on the ring: the leading room glows */
+.slot-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  min-width: 1.9em;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--ink);
+  font-size: max(12px, 2.2cqw);
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  animation: fade 200ms ease-out both;
+}
+
+.slot-count.is-top {
+  background: var(--light);
+  color: #1a1408;
+}
+
+.slot.is-picked {
+  background: radial-gradient(circle at 50% 55%, rgba(255, 214, 154, 0.24) 0, #141416 72%);
+  box-shadow: inset 0 0 0 2px var(--light);
+}
+
+/* phone */
+
+.phone {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: min(100%, 560px);
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.phone-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.wordmark-small {
+  font-size: 20px;
+}
+
+.phone-me {
+  color: var(--ink-2);
+  font-size: 14px;
+  text-align: right;
+}
+
+.phone-me b {
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.phone-status {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 84px;
+}
+
+.phone-title {
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.phone-ring {
+  width: 100%;
+  padding: 4px;
+}
+
+.phone-ring .centre-title.countdown {
+  font-size: 44px;
+}
+
+.phone-log {
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+.phone-score {
+  margin-top: auto;
+}
+
+.start .phone-h1 {
+  font-family: var(--display);
+  font-size: 40px;
+}
+
+.code-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  width: min(100%, 280px);
+}
+
+.code-input {
+  all: unset;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  font: 400 44px/1 var(--display);
+  letter-spacing: 0.3em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.code-input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.phone-join .text-link {
+  align-self: center;
+}
+
 /* the game stacks when the corners would cover the ring */
 
 @media (max-width: 1180px), (max-height: 700px) {
@@ -1439,7 +1707,23 @@ td {
   }
 
   .slot-label span {
-    display: none;
+    font-size: 10px;
+  }
+
+  /* chances stay visible: on the sides the number sits over its chance, so the label stays narrow */
+  .slot-label.is-left,
+  .slot-label.is-right {
+    flex-direction: column;
+    gap: 0;
+    line-height: 1.15;
+  }
+
+  .slot-label.is-left {
+    align-items: flex-end;
+  }
+
+  .slot-label.is-right {
+    align-items: flex-start;
   }
 
   .centre-sub {

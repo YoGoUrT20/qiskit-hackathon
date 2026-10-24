@@ -1,4 +1,5 @@
 import { classicalStep, Ghost, Mode, newGhost, pct, probs, project, sampleRoom, step } from '../engine/walk'
+import { ROOMS, WARMUP, word } from './rules'
 
 export type Phase = 'aim' | 'reveal' | 'won' | 'lost'
 
@@ -28,9 +29,9 @@ export type HuntAction =
   | { type: 'advance'; roll: number }
   | { type: 'restart'; mode: Mode; lights: number }
 
-export function newHunt(mode: Mode, lights: number): Hunt {
+export function newHunt(mode: Mode, lights: number, warmup = WARMUP): Hunt {
   return {
-    ghost: newGhost(mode),
+    ghost: newGhost(mode, ROOMS, warmup),
     phase: 'aim',
     turn: 1,
     lights,
@@ -40,7 +41,7 @@ export function newHunt(mode: Mode, lights: number): Hunt {
     found: null,
     nextId: 1,
     moved: null,
-    log: [{ id: 0, turn: 1, text: 'The ghost started in room 8 and has taken three steps. Shine a flashlight into a room.' }],
+    log: [{ id: 0, turn: 1, text: `The ghost started in room 8 and has taken ${word(warmup)} steps. Shine a flashlight into a room.` }],
   }
 }
 

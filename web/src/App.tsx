@@ -1,6 +1,8 @@
 import { ComponentType, useEffect, useState } from 'react'
 import { DocsView } from './views/DocsView'
 import { GameView } from './views/GameView'
+import { HostView } from './views/HostView'
+import { JoinView } from './views/JoinView'
 import { StartView } from './views/StartView'
 import { TutorialView } from './views/TutorialView'
 
@@ -9,6 +11,8 @@ const VIEWS = {
   '#/play': GameView,
   '#/tutorial': TutorialView,
   '#/docs': DocsView,
+  '#/host': HostView,
+  '#/join': JoinView,
 } satisfies Record<string, ComponentType>
 
 type Route = keyof typeof VIEWS | 'start'

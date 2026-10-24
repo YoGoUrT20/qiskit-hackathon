@@ -19,17 +19,22 @@ interface Props {
   roomLabel?: (room: number, p: number) => string
   /** the chances before the last step: ghosts split and travel to the neighbours */
   moved?: { id: number; from: number[] } | null
+  /** group play: votes per room, shown as a badge on each room that has any */
+  counts?: number[] | null
+  /** group play: the room this phone voted for */
+  picked?: number | null
   /** drawn over the track, under the rooms, in a 0..100 viewBox */
   overlay?: ReactNode
   children?: ReactNode
 }
 
-export function Ring({ probs, tone, hidden, lit, empty, found, disabled, onPick, roomLabel, moved, overlay, children }: Props) {
+export function Ring({ probs, tone, hidden, lit, empty, found, disabled, onPick, roomLabel, moved, counts, picked, overlay, children }: Props) {
   const n = probs.length
   const slot = n > 8 ? 11 : 15
   const radius = 39
   const scale = Math.max(0.5, ...probs)
   const travel = moved && !hidden ? moved : null
+  const most = counts ? Math.max(0, ...counts) : 0
 
   return (
     <div className="ring" style={{ '--slot': `${slot}%` } as CSSProperties}>
@@ -49,7 +54,8 @@ export function Ring({ probs, tone, hidden, lit, empty, found, disabled, onPick,
           transitionDuration: travel ? (arriving ? '520ms' : '280ms') : undefined,
           transitionDelay: arriving ? `${Math.round(TRAVEL_MS * 0.55)}ms` : '0ms',
         }
-        const state = [k === lit && 'is-lit', k === found && 'is-found'].filter(Boolean).join(' ')
+        const state = [k === lit && 'is-lit', k === found && 'is-found', k === picked && 'is-picked'].filter(Boolean).join(' ')
+        const votes = counts?.[k] ?? 0
         // rooms pop in one after another around the ring
         const enter = { animationDelay: `${120 + k * (480 / n)}ms` }
         return (
@@ -68,6 +74,7 @@ export function Ring({ probs, tone, hidden, lit, empty, found, disabled, onPick,
               <span className="slot-ghost" style={ghost}>
                 <Ghost tone={hidden ? 'white' : tone} />
               </span>
+              {votes > 0 && <span className={`slot-count ${votes === most ? 'is-top' : ''}`}>{votes}</span>}
               {k === empty && <span className="slot-tag">empty</span>}
               {k === found && <span className="slot-tag is-light">caught</span>}
             </button>

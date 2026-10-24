@@ -3,6 +3,7 @@ import { Ghost } from '../components/Ghost'
 import { Ring } from '../components/Ring'
 import { StepArrows } from '../components/StepArrows'
 import { Ghost as Walker, Mode, newGhost, pct, probs, project } from '../engine/walk'
+import { LIGHTS, WARMUP, word } from '../game/rules'
 
 // A guided walk-through: the ghost starts alone in room 1 and the player
 // watches it split left and right, step by step, until the waves cancel.
@@ -58,7 +59,7 @@ const STEPS: Step[] = [
   },
   {
     title: 'Ready to hunt',
-    body: 'In the real hunt the ghost starts in room 8 and has already taken three steps. You get four flashlights. After every miss it takes another step.',
+    body: `In the real hunt the ghost starts in room 8 and has already taken ${word(WARMUP)} steps. You get ${word(LIGHTS)} flashlights. After every miss it takes another step.`,
     walk: 4,
   },
 ]

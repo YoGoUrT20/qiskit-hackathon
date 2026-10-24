@@ -1,0 +1,21 @@
+{
+  /* Type-checks the Convex functions; `npx convex dev` and `npx convex deploy` use it too. */
+  "compilerOptions": {
+    "allowJs": true,
+    "strict": true,
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "lib": ["ES2022", "dom"],
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "isolatedModules": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["./**/*", "../src/engine/walk.ts", "../src/game/hunt.ts", "../src/game/rules.ts"],
+  "exclude": ["./_generated"]
+}

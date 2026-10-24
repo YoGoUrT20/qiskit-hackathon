@@ -1,6 +1,6 @@
 # Ghost Walk — quantum ghost hunting game
 
-> **The plan, written at the start of the hackathon.** Kept as a record of how the project was scoped. The game as built differs in places: 4 flashlights instead of 8, a tutorial and fog mode were added, and the noise slider, spread chart, 2-player mode and 2D mansion were not built. For the current state see the [README](README.md), [docs/how-it-works.md](docs/how-it-works.md) and [docs/real-chip.md](docs/real-chip.md).
+> **The plan, written at the start of the hackathon.** Kept as a record of how the project was scoped. The game as built differs in places: 4 flashlights instead of 8 and 7 warm-up steps instead of 3 (tuned by simulation), a tutorial and fog mode were added, audience voting became an online group mode with phones and a QR code, and the noise slider, spread chart, 2-player mode and 2D mansion were not built. For the current state see the [README](README.md), [docs/how-it-works.md](docs/how-it-works.md) and [docs/real-chip.md](docs/real-chip.md).
 
 > Working title. "Quantum Ghost Hunt" is already taken by a 2020 Aalto University student project, so we need our own name. Ideas: *Ghost Walk*, *Haunted Qubits*, *Spooky Corridor*.
 
