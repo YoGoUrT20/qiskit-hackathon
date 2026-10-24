@@ -11,12 +11,12 @@ npm run build      # static site in dist/
 - `#/` start screen, `#/play` the hunt, `#/tutorial` the guided walk-through, `#/docs` how it works and the real-chip results.
 - `#/host/<code>` the projector screen of a group game, `#/join/<code>` the phone side, `#/join` asks for a code. `/1234` and `/join/1234` redirect to `#/join/1234`, so the short link to type is `ghost.yogourt.dev/1234`.
 - `src/engine/walk.ts` is the same quantum walk as `../quantum_walk.py` (Hadamard coin, start coin (|0> + i|1>)/sqrt(2)), simulated in the browser so every click answers instantly.
-- `src/game/rules.ts` holds the rules: 16 rooms, 4 flashlights, 7 warm-up steps, vote times. `src/game/hunt.ts` is the turn reducer that both solo and group play run.
+- `src/game/rules.ts` holds the rules: 16 rooms, 5 flashlights, 7 warm-up steps, vote times. `src/game/hunt.ts` is the turn reducer that both solo and group play run.
 - `src/data/chip.json` holds the real IBM runs. After a new hardware job (`python ../run_on_ibm.py fetch`), refresh it with `npm run sync-data`.
 
 ## Online group play
 
-**Play online** (top right of the start screen and the hunt) creates a game and opens the host screen: a QR code, a four-digit code and a short link. Phones join and get a generated name ("Foggy Qubit"; nothing typed reaches the projector). Each turn everyone votes for a room; the host screen shows the live count per room. When the countdown ends, or the host closes the vote, the most-voted room is searched (a tie is drawn at random among the leaders; if nobody voted, a random room). Then the ghost steps, as in solo, and the next vote opens. The host can switch quantum / coin-flip and the vote time (10, 20, 30 s) between ghosts, and counts ghosts caught.
+**Play online** (next to Docs on the hunt) creates a game and opens the host screen: a QR code, a four-digit code and a short link. Phones join and get a generated name ("Foggy Qubit"; nothing typed reaches the projector). Each turn everyone votes for a room; the host screen shows the live count per room. When the countdown ends, or the host closes the vote, the most-voted room is searched (a tie is drawn at random among the leaders; if nobody voted, a random room). Then the ghost steps, as in solo, and the next vote opens. The host can switch quantum / coin-flip and the vote time (10, 20, 30 s) between ghosts, and counts ghosts caught.
 
 **The server owns the ghost.** The game document in Convex holds the amplitudes; every flashlight (`project`), step and random roll runs in a Convex mutation ([`convex/games.ts`](convex/games.ts)) with the same `walk.ts` and `hunt.ts` as solo play. Phones only send votes and receive chances, never amplitudes, and there is no hidden "real" room to leak: the outcome is drawn when the flashlight shines. Host actions need a host key that only the creating browser holds.
 

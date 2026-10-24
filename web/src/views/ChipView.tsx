@@ -18,12 +18,6 @@ const NOTES = [
   'Interference piles the ghost into room 8, on the far side of the ring. 48% on the chip, 62% ideal, 22% for a coin-flipping ghost.',
 ]
 
-const fmtDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
-
-const seconds = (a: string | null, b: string | null) =>
-  a && b ? Math.max(0, Math.round((Date.parse(b) - Date.parse(a)) / 1000)) : null
-
 export function ChipView() {
   const run = chip.first
   const finale = circuit(run, 8, FINALE_STEPS)!
@@ -33,7 +27,6 @@ export function ChipView() {
   const current = circuit(run, 8, step)!
   const done = shot != null && picked != null
   const total = finale.counts.reduce((a, b) => a + b, 0)
-  const queue = seconds(run.created, run.running)
 
   const pick = (room: number) => {
     setPicked(room)
@@ -58,13 +51,6 @@ export function ChipView() {
             This ghost walked {FINALE_STEPS} steps around an 8-room ring on {run.backend}, an IBM quantum computer. Where it is comes from
             one of the {total.toLocaleString('en-GB')} measurements the chip sent back. You get one flashlight.
           </p>
-          <ul className="chips" aria-label="Run details">
-            <li>Job {run.jobId}</li>
-            <li>{fmtDate(run.created)}</li>
-            {queue != null && <li>Queue {queue} s</li>}
-            {run.qpuSeconds != null && <li>QPU {run.qpuSeconds} s</li>}
-            <li>Qubits {finale.qubits.join(', ')}</li>
-          </ul>
         </div>
       </div>
 

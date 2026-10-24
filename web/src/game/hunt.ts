@@ -20,7 +20,7 @@ export interface Hunt {
   found: number | null
   log: LogEntry[]
   nextId: number
-  /** chances just before the last step, so the ring can animate the move */
+  // chances just before the last step, so the ring can animate the move
   moved: { id: number; from: number[] } | null
 }
 

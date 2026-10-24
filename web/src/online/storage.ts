@@ -44,17 +44,17 @@ export const saveHost = (code: string, seat: HostSeat | null) => write('host', c
 export const readPlayer = (code: string) => read<PlayerSeat>('player', code)
 export const savePlayer = (code: string, seat: PlayerSeat | null) => write('player', code, seat)
 
-/** "#/join/1234" -> "1234" */
+// #/join/1234" -> "1234"
 export function codeFromHash(prefix: string): string | null {
   const m = window.location.hash.slice(prefix.length).match(/^\/(\d{4})\b/)
   return m ? m[1] : null
 }
 
 export const joinUrl = (code: string) => `${window.location.origin}/#/join/${code}`
-/** what people type: the host serves /1234 as the join page for game 1234 */
+// what people type: the host serves /1234 as the join page for game 1234
 export const shortJoinUrl = (code: string) => `${window.location.host}/${code}`
 
-/** The game code in the hash, kept current: App only re-renders when the route itself changes. */
+// the game code in the hash, kept current: App only re-renders when the route itself changes.
 export function useHashCode(prefix: string): string | null {
   const [code, setCode] = useState(() => codeFromHash(prefix))
   useEffect(() => {

@@ -1,8 +1,3 @@
-// Group play, server-authoritative. The ghost's amplitudes live in the game
-// document; every flashlight, step and random roll runs here, in a mutation,
-// with the same engine and reducer as solo play (src/engine/walk.ts,
-// src/game/hunt.ts). Clients only send votes and read the result.
-
 import { ConvexError, v } from 'convex/values'
 import { internal } from './_generated/api'
 import type { Doc, Id } from './_generated/dataModel'
@@ -21,7 +16,6 @@ async function hostGame(ctx: MutationCtx, gameId: Id<'games'>, hostKey: string) 
   return game
 }
 
-/** What every screen may see. Chances, not amplitudes: nothing here says where the ghost "really" is, because nowhere does. */
 function publicView(game: Doc<'games'>) {
   const h = game.hunt
   return {
@@ -99,7 +93,6 @@ export const setOptions = mutation({
   },
 })
 
-/** Release a new ghost: the first one from the lobby, or the next one after a catch or an escape. */
 export const newRound = mutation({
   args: { gameId: v.id('games'), hostKey: v.string() },
   handler: async (ctx, { gameId, hostKey }) => {
@@ -119,7 +112,6 @@ export const closeVote = mutation({
   },
 })
 
-/** The host screen pings while it is open, so a game on a projector never expires. */
 export const touch = mutation({
   args: { gameId: v.id('games'), hostKey: v.string() },
   handler: async (ctx, { gameId, hostKey }) => {
@@ -165,7 +157,6 @@ export const phone = query({
   },
 })
 
-/** Vote for the room to search this turn. A vote that arrives after the vote closed is refused, not moved to the next turn. */
 export const vote = mutation({
   args: { gameId: v.id('games'), playerId: v.id('players'), round: v.number(), turn: v.number(), room: v.number() },
   handler: async (ctx, a) => {
@@ -187,7 +178,6 @@ export const vote = mutation({
 
 // ------------------------------------------------------------ turn engine
 
-/** Count the votes, search the most-voted room (a tie is broken at random), and schedule the ghost's step. */
 async function resolveVote(ctx: MutationCtx, game: Doc<'games'>) {
   const h = game.hunt
   if (!h || h.phase !== 'aim') return
@@ -219,13 +209,11 @@ export const resolve = internalMutation({
   args: turnRef,
   handler: async (ctx, { gameId, round, turn }) => {
     const game = await ctx.db.get(gameId)
-    // stale timers (the host closed early, or started a new ghost) do nothing
     if (!game || game.round !== round || game.hunt?.turn !== turn) return
     await resolveVote(ctx, game)
   },
 })
 
-/** The ghost steps (or, with no flashlight left, a final look finds it) and the next vote opens. */
 export const advance = internalMutation({
   args: turnRef,
   handler: async (ctx, { gameId, round, turn }) => {

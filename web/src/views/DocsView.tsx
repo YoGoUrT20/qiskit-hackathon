@@ -15,9 +15,7 @@ const IDEAS = [
   ['Decoherence', 'On a real chip, noise slowly wipes out those signs. The ghost leaks into rooms a perfect ghost can never reach.'],
 ] as const
 
-/** Fade each docs block up the first time it scrolls into view. */
 function useReveal() {
-  // layout effect: hide the blocks before the first paint, so nothing flashes
   useLayoutEffect(() => {
     const blocks = document.querySelectorAll<HTMLElement>('.docs-intro, .docs-section > *')
     if (!('IntersectionObserver' in window)) return
@@ -43,7 +41,6 @@ const SECTIONS = [
   { id: 'real-chip', label: 'Real chip' },
 ]
 
-/** The section currently in the reading band of the screen. */
 function useActiveSection() {
   const [active, setActive] = useState(SECTIONS[0].id)
   useEffect(() => {

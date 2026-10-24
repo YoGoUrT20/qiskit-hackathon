@@ -7,13 +7,10 @@ import { Ghost } from '../components/Ghost'
 import { Ring } from '../components/Ring'
 import { Mode, newGhost, pct, probs } from '../engine/walk'
 import { cap, LIGHTS, ROOMS, VOTE_SECONDS, WARMUP, word } from '../game/rules'
+import { BackButton } from '../online/BackButton'
 import { convex } from '../online/client'
 import { joinUrl, readHost, shortJoinUrl, useHashCode } from '../online/storage'
 import { useCountdown } from '../online/useCountdown'
-
-// The projector screen of a group game: the ring with live votes, the QR code
-// and code to join, who is in, and the controls. Only the browser that created
-// the game holds its host key.
 
 export function HostView() {
   const code = useHashCode('#/host')
@@ -104,6 +101,7 @@ function HostScreen({ code, gameId, hostKey }: { code: string; gameId: Id<'games
   return (
     <main className="game host">
       <div className="corner corner-tl">
+        <BackButton />
         <a href="#/" className="wordmark">
           <Ghost tone="quantum" className="wordmark-ghost" />
           Ghost Walk

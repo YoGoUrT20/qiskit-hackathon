@@ -5,7 +5,6 @@ import type { Mode } from '../engine/walk'
 import { convex } from './client'
 import { saveHost } from './storage'
 
-/** Creates a group game and opens its host screen. Hidden when no backend is configured. */
 export function PlayOnlineButton({ mode }: { mode?: Mode }) {
   return convex ? <CreateGame mode={mode} /> : null
 }

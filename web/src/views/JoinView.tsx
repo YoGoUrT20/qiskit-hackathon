@@ -5,13 +5,11 @@ import { Ghost } from '../components/Ghost'
 import { Ring } from '../components/Ring'
 import { newGhost, pct, probs } from '../engine/walk'
 import { ROOMS, WARMUP } from '../game/rules'
+import { BackButton } from '../online/BackButton'
 import { convex } from '../online/client'
 import { type PlayerSeat, readPlayer, savePlayer, useHashCode } from '../online/storage'
 import { useCountdown } from '../online/useCountdown'
 import { Gone } from './HostView'
-
-// The phone side of a group game: join by code (from the QR code or typed),
-// then vote for a room each turn and watch what the flashlight found.
 
 export function JoinView() {
   const code = useHashCode('#/join')
@@ -28,6 +26,9 @@ function CodeForm({ error }: { error?: string }) {
   }
   return (
     <main className="start phone-join">
+      <div className="top-left">
+        <BackButton />
+      </div>
       <div className="start-ghost" aria-hidden="true">
         <Ghost tone="quantum" />
       </div>
@@ -157,10 +158,13 @@ function Phone({ code, seat, onLost }: { code: string; seat: PlayerSeat; onLost:
   return (
     <main className="phone">
       <header className="phone-head">
-        <a href="#/" className="wordmark wordmark-small">
-          <Ghost tone="quantum" className="wordmark-ghost" />
-          Ghost Walk
-        </a>
+        <span className="corner-actions">
+          <BackButton compact />
+          <a href="#/" className="wordmark wordmark-small">
+            <Ghost tone="quantum" className="wordmark-ghost" />
+            Ghost Walk
+          </a>
+        </span>
         <span className="phone-me">
           {seat.name} · <b>{code}</b>
         </span>

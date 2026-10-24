@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-/** Whole seconds until `closesAt` (a server timestamp), ticking while a vote is open. */
+// seconds until `closesAt` (on a server) ticking while a vote is open.
 export function useCountdown(closesAt: number | null | undefined): number | null {
   const [now, setNow] = useState(() => Date.now())
   useEffect(() => {

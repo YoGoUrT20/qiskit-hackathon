@@ -1,8 +1,7 @@
-/** Curved arrows from every room the ghost is in to both neighbours: one step left, one step right. */
 export function StepArrows({ from }: { from: number[] }) {
   const n = from.length
   const step = (2 * Math.PI) / n
-  const r = 31 // just inside the ring of rooms (rooms sit at 39)
+  const r = 31
   const pt = (a: number) => `${(50 + r * Math.sin(a)).toFixed(2)} ${(50 - r * Math.cos(a)).toFixed(2)}`
 
   const arrows: { key: string; d: string }[] = []

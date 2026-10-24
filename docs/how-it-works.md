@@ -170,7 +170,7 @@ The real chip is used where it makes sense: a pre-recorded finale that uses its 
 [`web/src/game/hunt.ts`](../web/src/game/hunt.ts) is a reducer with four phases:
 
 ```
-start: 16 rooms, ghost in room 8, 7 warm-up steps, 4 flashlights
+start: 16 rooms, ghost in room 8, 7 warm-up steps, 5 flashlights
 
 aim     player clicks room r, roll = Math.random()
           roll < P(r)  -> project onto room r -> won
@@ -185,9 +185,10 @@ reveal  after 1.3 s:
 | Rules | Quantum: best room | Quantum: random room | Coin-flip: best room | Coin-flip: random room |
 |---|---|---|---|---|
 | 4 flashlights, 3 warm-up steps (before) | 88.3 % | 62.8 % | 81.3 % | 63.0 % |
-| 4 flashlights, 7 warm-up steps (now) | 64.0 % | 41.3 % | 68.5 % | 41.3 % |
+| 4 flashlights, 7 warm-up steps | 64.0 % | 41.3 % | 68.5 % | 41.3 % |
+| 5 flashlights, 7 warm-up steps (now) | 71.1 % | 48.6 % | 74.7 % | 48.6 % |
 
-"Random room" picks among rooms that can still hold the ghost; any room at random wins 23 %. After three steps the ghost is in only four rooms (⅛ ⅜ ⅜ ⅛, the same for both ghosts), so good play almost always won. After seven it covers eight rooms and the quantum ghost has already split into two peaks running apart (21 % at rooms 3 and 13, 10 % at rooms 7 and 9; the coin-flipping ghost peaks at 27 % in the middle). Good play now wins about two hunts in three, beats random play by 23 points, and the quantum ghost is the harder one. Adding flashlights instead would have made the game easier still.
+"Random room" picks among rooms that can still hold the ghost; any room at random wins 23 % with 4 flashlights, 28 % with 5. After three steps the ghost is in only four rooms (⅛ ⅜ ⅜ ⅛, the same for both ghosts), so good play almost always won. After seven it covers eight rooms and the quantum ghost has already split into two peaks running apart (21 % at rooms 3 and 13, 10 % at rooms 7 and 9; the coin-flipping ghost peaks at 27 % in the middle). With 4 flashlights good play won about two hunts in three and beat random play by 23 points; adding flashlights instead of warm-up steps would only have made the game easier. That turned out too hard for new players, so the hunt now has 5 flashlights: good play wins 71–75 %, random play about half, still 22–26 points behind. The quantum ghost stays the harder one.
 
 **"What happened" text.** After each step the game compares the new chances with what a coin-flipping ghost would make from the same chances one step earlier (`classicalStep`). It picks the room with the largest gap. Below a 7-point gap it just says the ghost stepped both ways; otherwise it reports where waves cancelled or added up, with both numbers. This isolates the effect of interference in that one step, including after the flashlight has reshaped the ghost.
 

@@ -1,12 +1,3 @@
-// A showcase crowd against a real Convex deployment: one host, N phones that
-// join and vote at the same moment.
-//
-//   node scripts/crowd-test.ts            # 100 phones, VITE_CONVEX_URL from .env.local
-//   node scripts/crowd-test.ts 30
-//
-// Checks that every join and vote lands, that the host sees every vote, and
-// that closing the vote searches the most-voted room.
-
 import { readFileSync } from 'node:fs'
 import { ConvexHttpClient } from 'convex/browser'
 import { api } from '../convex/_generated/api.js'
@@ -46,7 +37,6 @@ if (!state?.hunt) throw new Error('no hunt')
 const p = state.hunt.probs
 const ranked = p.map((v, k) => [v, k]).sort((a, b) => b[0] - a[0]).map(([, k]) => k)
 
-// most phones pick the likeliest room, some the next ones
 const choice = (i: number) => ranked[i % 10 < 6 ? 0 : i % 10 < 9 ? 1 : 2]
 const votes = await Promise.all(
   joins.map((j, i) =>

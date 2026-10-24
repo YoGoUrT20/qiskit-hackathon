@@ -1,28 +1,65 @@
 import { useEffect, useReducer, useState } from 'react'
 import { Ghost } from '../components/Ghost'
-import { Ring } from '../components/Ring'
+import { Layer, Ring } from '../components/Ring'
 import { Mode, pct, probs } from '../engine/walk'
-import { huntReducer, newHunt } from '../game/hunt'
+import { Hunt, huntReducer, newHunt } from '../game/hunt'
 import { LIGHTS } from '../game/rules'
+import { loose, newTwin, TWINS, twinEmpty, twinLit, twinPhase, twinReducer, twinState, twinSub, twinTitle } from '../game/twin'
 import { PlayOnlineButton } from '../online/PlayOnlineButton'
 
+// 'both' puts a quantum and a coin-flipping ghost in the same rooms, hunted with one flashlight
+type Choice = Mode | 'both'
+
+const LABEL: Record<Choice, string> = { quantum: 'Quantum', classical: 'Coin-flip', both: 'Both' }
+
+const RULES: Record<'one' | 'both', string[]> = {
+  one: [
+    'Bigger, brighter ghost means a better chance it is in that room.',
+    'Click a room to shine a flashlight. A miss empties it and every other room grows.',
+    'Then the ghost steps one room left and one room right at the same time. Its waves can cancel.',
+  ],
+  both: [
+    'Every room holds two ghosts: blue is quantum, orange flips a coin. They start together and take the same steps.',
+    'Click a room: one flashlight searches it for both. A miss empties it for both.',
+    'Watch them step. The coin-flip ghost spreads into one hill; the waves of the quantum ghost cancel and add up, so it runs apart in two groups.',
+  ],
+}
+
+function Lights({ lights, max }: { lights: number; max: number }) {
+  return (
+    <span className="lights" role="img" aria-label={`${lights} of ${max} flashlights left`}>
+      {Array.from({ length: max }, (_, i) => (
+        <span key={i} className={i < lights ? 'is-on' : ''} />
+      ))}
+    </span>
+  )
+}
+
 export function GameView() {
-  const [mode, setMode] = useState<Mode>('quantum')
+  const [mode, setMode] = useState<Choice>('quantum')
   const [fog, setFog] = useState(false)
   const [hunt, dispatch] = useReducer(huntReducer, undefined, () => newHunt('quantum', LIGHTS))
+  const [twin, dispatchTwin] = useReducer(twinReducer, undefined, () => newTwin(LIGHTS))
+  const both = mode === 'both'
+  const act = both ? dispatchTwin : dispatch
+  const phase = both ? twinPhase(twin) : hunt.phase
 
   useEffect(() => {
-    if (hunt.phase !== 'reveal') return
-    const t = setTimeout(() => dispatch({ type: 'advance', roll: Math.random() }), 1300)
+    if (phase !== 'reveal') return
+    const t = setTimeout(() => act({ type: 'advance', roll: Math.random() }), 1300)
     return () => clearTimeout(t)
-  }, [hunt.phase, hunt.turn])
+  }, [phase, hunt.turn, twin.nextId, both])
 
   const p = probs(hunt.ghost)
   const over = hunt.phase === 'won' || hunt.phase === 'lost'
   const hidden = fog && !over
   const parity = p.findIndex((v) => v > 1e-9) % 2
-  const pick = (room: number) => dispatch({ type: 'pick', room, roll: Math.random() })
-  const restart = (m = mode) => dispatch({ type: 'restart', mode: m, lights: LIGHTS })
+  const pick = (room: number) => act({ type: 'pick', room, roll: Math.random() })
+  const restart = (m = mode) => {
+    // the twin hunt always has one ghost of each, so it ignores the mode
+    if (m === 'both') dispatchTwin({ type: 'restart', mode: 'quantum', lights: LIGHTS })
+    else dispatch({ type: 'restart', mode: m, lights: LIGHTS })
+  }
 
   const title = { aim: `Turn ${hunt.turn}`, reveal: 'Empty', won: 'Caught', lost: 'Escaped' }[hunt.phase]
   const sub = {
@@ -31,6 +68,17 @@ export function GameView() {
     won: `Room ${(hunt.found ?? 0) + 1}, turn ${hunt.turn}`,
     lost: `It was in room ${(hunt.found ?? 0) + 1}`,
   }[hunt.phase]
+  const log = both ? twin.log : hunt.log
+
+  // a caught or escaped ghost shows where it was, even in fog
+  const layer = (h: Hunt): Layer => ({
+    probs: probs(h.ghost),
+    tone: h.ghost.mode,
+    hidden: fog && loose(h),
+    moved: h.moved,
+    found: loose(h) ? null : h.found,
+  })
+  const [q, c] = [layer(twin.quantum), layer(twin.classical)]
 
   return (
     <main className="game">
@@ -40,24 +88,18 @@ export function GameView() {
           Ghost Walk
         </a>
         <span className="corner-actions">
-          {/* on a narrow screen the button joins this row instead of sitting above the settings */}
-          <span className="only-stacked">
-            <PlayOnlineButton mode={mode} />
-          </span>
           <a className="pill pill-small hide-narrow" href="#/docs">
             Docs
           </a>
+          <PlayOnlineButton mode={both ? undefined : mode} />
         </span>
       </div>
 
-      <div className="corner corner-tr corner-stack">
-        <span className="only-wide">
-          <PlayOnlineButton mode={mode} />
-        </span>
+      <div className="corner corner-tr">
         <section className="panel-card" aria-label="Ghost settings">
           <span className="card-label">Ghost</span>
           <div className="tabs" role="tablist" aria-label="Ghost type">
-            {(['quantum', 'classical'] as const).map((m) => (
+            {(['quantum', 'classical', 'both'] as const).map((m) => (
               <button
                 key={m}
                 type="button"
@@ -69,8 +111,15 @@ export function GameView() {
                   restart(m)
                 }}
               >
-                <Ghost tone={m} className="tab-ghost" />
-                {m === 'quantum' ? 'Quantum' : 'Coin-flip'}
+                {m === 'both' ? (
+                  <span className="tab-pair">
+                    <Ghost tone="quantum" className="tab-ghost" />
+                    <Ghost tone="classical" className="tab-ghost" />
+                  </span>
+                ) : (
+                  <Ghost tone={m} className="tab-ghost" />
+                )}
+                {LABEL[m]}
               </button>
             ))}
           </div>
@@ -83,39 +132,69 @@ export function GameView() {
       </div>
 
       <section className="game-stage" aria-label="The haunted corridor">
-        <Ring
-          probs={p}
-          tone={mode}
-          hidden={hidden}
-          lit={hunt.phase === 'reveal' || hunt.phase === 'won' ? hunt.lit : null}
-          empty={hunt.empty}
-          found={over ? hunt.found : null}
-          disabled={hunt.phase !== 'aim'}
-          moved={hunt.moved}
-          onPick={pick}
-          roomLabel={(k, v) => (hidden ? `Search room ${k + 1}` : `Search room ${k + 1}, ${pct(v)} chance`)}
-        >
-          <p className="centre-title">{title}</p>
-          {sub && <p className="centre-sub">{sub}</p>}
-          <span className="lights" role="img" aria-label={`${hunt.lights} of ${hunt.maxLights} flashlights left`}>
-            {Array.from({ length: hunt.maxLights }, (_, i) => (
-              <span key={i} className={i < hunt.lights ? 'is-on' : ''} />
-            ))}
-          </span>
-          {over && (
-            <button type="button" className="pill pill-light" onClick={() => restart()}>
-              Hunt again
-            </button>
-          )}
-        </Ring>
+        {both ? (
+          <Ring
+            {...q}
+            pair={c}
+            lit={twinLit(twin)}
+            empty={twinEmpty(twin)}
+            disabled={phase !== 'aim'}
+            onPick={pick}
+            roomLabel={(k) =>
+              q.hidden || c.hidden
+                ? `Search room ${k + 1}`
+                : `Search room ${k + 1}: quantum ghost ${pct(q.probs[k])}, coin-flip ghost ${pct(c.probs[k])}`
+            }
+          >
+            <p className="centre-title">{twinTitle(twin)}</p>
+            <p className="centre-sub">{twinSub(twin)}</p>
+            <span className="pair-key">
+              {TWINS.map((m) => (
+                <span key={m} className={`pair-key-${m}`}>
+                  <Ghost tone={m} className="tab-ghost" />
+                  {LABEL[m]}
+                  {twinState(twin[m]) && <em>{twinState(twin[m])}</em>}
+                </span>
+              ))}
+            </span>
+            <Lights lights={Math.min(twin.quantum.lights, twin.classical.lights)} max={twin.quantum.maxLights} />
+            {phase === 'over' && (
+              <button type="button" className="pill pill-light" onClick={() => restart()}>
+                Hunt again
+              </button>
+            )}
+          </Ring>
+        ) : (
+          <Ring
+            probs={p}
+            tone={mode}
+            hidden={hidden}
+            lit={hunt.phase === 'reveal' || hunt.phase === 'won' ? hunt.lit : null}
+            empty={hunt.empty}
+            found={over ? hunt.found : null}
+            disabled={hunt.phase !== 'aim'}
+            moved={hunt.moved}
+            onPick={pick}
+            roomLabel={(k, v) => (hidden ? `Search room ${k + 1}` : `Search room ${k + 1}, ${pct(v)} chance`)}
+          >
+            <p className="centre-title">{title}</p>
+            {sub && <p className="centre-sub">{sub}</p>}
+            <Lights lights={hunt.lights} max={hunt.maxLights} />
+            {over && (
+              <button type="button" className="pill pill-light" onClick={() => restart()}>
+                Hunt again
+              </button>
+            )}
+          </Ring>
+        )}
       </section>
 
       <details className="corner corner-bl panel-card" open>
         <summary>How to play</summary>
         <ol className="rules">
-          <li>Bigger, brighter ghost means a better chance it is in that room.</li>
-          <li>Click a room to shine a flashlight. A miss empties it and every other room grows.</li>
-          <li>Then the ghost steps one room left and one room right at the same time. Its waves can cancel.</li>
+          {RULES[both ? 'both' : 'one'].map((rule) => (
+            <li key={rule}>{rule}</li>
+          ))}
         </ol>
         <span className="card-links">
           <a href="#/tutorial" className="text-link">
@@ -130,7 +209,7 @@ export function GameView() {
       <section className="corner corner-br panel-card" aria-label="What happened">
         <span className="card-label">What happened</span>
         <ol className="log" aria-live="polite">
-          {hunt.log.slice(0, 3).map((entry, i) => (
+          {log.slice(0, 3).map((entry, i) => (
             <li key={entry.id} className={i === 0 ? 'is-new' : ''}>
               <span className="log-turn">T{entry.turn}</span>
               <span>{entry.text}</span>

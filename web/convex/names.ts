@@ -1,6 +1,3 @@
-// Players get a generated name instead of typing one: nothing typed on a phone
-// ends up on the projector.
-
 const ADJECTIVES = [
   'Pale', 'Brave', 'Quiet', 'Lucky', 'Misty', 'Swift', 'Sly', 'Bold', 'Calm', 'Eerie',
   'Sleepy', 'Wise', 'Jolly', 'Hollow', 'Shady', 'Spooky', 'Cosmic', 'Gentle', 'Rusty', 'Velvet',

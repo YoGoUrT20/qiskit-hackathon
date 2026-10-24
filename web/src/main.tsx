@@ -10,9 +10,9 @@ import './styles.css'
 import { App } from './App'
 import { convex } from './online/client'
 
-// Short links for phones: /1234 and /join/1234 open the join page for game 1234, /join asks for the code.
+// short links for phones: /1234 ||  /join/1234
 const short = window.location.pathname.match(/^\/(join\/?)?(\d{4})?\/?$/)
-if (short && (short[1] || short[2])) window.history.replaceState(null, '', `/#/join${short[2] ? `/${short[2]}` : ''}`)
+if (short && (short[1] || short[2])) window.history.replaceState(window.history.state, '', `/#/join${short[2] ? `/${short[2]}` : ''}`)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

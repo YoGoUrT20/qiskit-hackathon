@@ -3,9 +3,14 @@ import { pct } from '../engine/walk'
 import { Ghost, Tone } from './Ghost'
 import { Travel, TRAVEL_MS } from './Travel'
 
-// The corridor loops, so the rooms sit on a ring. In each room the ghost is
-// drawn as a ghost: the bigger and brighter it is, the more likely you are to
-// find it there. Rooms it cannot be in show a dashed outline.
+// one ghost drawn in the ring
+export interface Layer {
+  probs: number[]
+  tone: Tone
+  hidden?: boolean
+  moved?: { id: number; from: number[] } | null
+  found?: number | null
+}
 
 interface Props {
   probs: number[]
@@ -17,23 +22,25 @@ interface Props {
   disabled?: boolean
   onPick?: (room: number) => void
   roomLabel?: (room: number, p: number) => string
-  /** the chances before the last step: ghosts split and travel to the neighbours */
   moved?: { id: number; from: number[] } | null
-  /** group play: votes per room, shown as a badge on each room that has any */
   counts?: number[] | null
-  /** group play: the room this phone voted for */
   picked?: number | null
-  /** drawn over the track, under the rooms, in a 0..100 viewBox */
+  // a second ghost in the same rooms, drawn beside the first on one scale
+  pair?: Layer
   overlay?: ReactNode
   children?: ReactNode
 }
 
-export function Ring({ probs, tone, hidden, lit, empty, found, disabled, onPick, roomLabel, moved, counts, picked, overlay, children }: Props) {
+export function Ring({ probs, tone, hidden, lit, empty, found, disabled, onPick, roomLabel, moved, counts, picked, pair, overlay, children }: Props) {
+  const layers: Layer[] = [{ probs, tone, hidden, moved, found }, ...(pair ? [pair] : [])]
   const n = probs.length
-  const slot = n > 8 ? 11 : 15
+  const slot = pair ? 13 : n > 8 ? 11 : 15
   const radius = 39
-  const scale = Math.max(0.5, ...probs)
-  const travel = moved && !hidden ? moved : null
+  const scale = Math.max(0.5, ...layers.flatMap((l) => (l.hidden ? [] : l.probs)))
+  // a pair shares each room: first ghost on the left, second on the right
+  const spot = pair ? [28, 72] : [50]
+  const [lo, hi] = pair ? [18, 36] : [34, 66]
+  const travels = layers.map((l) => (l.moved && !l.hidden ? l.moved : null))
   const most = counts ? Math.max(0, ...counts) : 0
 
   return (
@@ -44,18 +51,12 @@ export function Ring({ probs, tone, hidden, lit, empty, found, disabled, onPick,
         const a = (k * 2 * Math.PI) / n
         const at = (r: number) => ({ left: `${50 + r * Math.sin(a)}%`, top: `${50 - r * Math.cos(a)}%` })
         const side = Math.sin(a) > 0.3 ? 'is-right' : Math.sin(a) < -0.3 ? 'is-left' : ''
-        const there = hidden || p >= 1e-4
-        const share = hidden ? 0.55 : Math.sqrt(p / scale)
-        // after a step, ghosts leaving a room shrink at once; arriving ones grow as the travellers land
-        const arriving = travel != null && p > travel.from[k] + 1e-9
-        const ghost: CSSProperties = {
-          width: there ? `${34 + 66 * share}%` : '0%',
-          opacity: there ? 0.5 + 0.5 * share : 0,
-          transitionDuration: travel ? (arriving ? '520ms' : '280ms') : undefined,
-          transitionDelay: arriving ? `${Math.round(TRAVEL_MS * 0.55)}ms` : '0ms',
-        }
-        const state = [k === lit && 'is-lit', k === found && 'is-found', k === picked && 'is-picked'].filter(Boolean).join(' ')
+        const there = layers.map((l) => l.hidden || l.probs[k] >= 1e-4)
+        const anyone = there.some(Boolean)
+        const caught = layers.some((l) => l.found === k)
+        const state = [k === lit && 'is-lit', caught && 'is-found', k === picked && 'is-picked'].filter(Boolean).join(' ')
         const votes = counts?.[k] ?? 0
+        const label = layers.some((l) => !l.hidden && l.probs[k] >= 0.0005)
         // rooms pop in one after another around the ring
         const enter = { animationDelay: `${120 + k * (480 / n)}ms` }
         return (
@@ -68,29 +69,62 @@ export function Ring({ probs, tone, hidden, lit, empty, found, disabled, onPick,
               onClick={() => onPick?.(k)}
               aria-label={roomLabel ? roomLabel(k, p) : `Room ${k + 1}`}
             >
-              <span className="slot-outline" style={{ opacity: there ? 0 : 1, transitionDelay: travel && !there ? '0ms' : undefined }}>
+              <span className="slot-outline" style={{ opacity: anyone ? 0 : 1, transitionDelay: travels.some(Boolean) && !anyone ? '0ms' : undefined }}>
                 <Ghost tone={tone} outline />
               </span>
-              <span className="slot-ghost" style={ghost}>
-                <Ghost tone={hidden ? 'white' : tone} />
-              </span>
+              {layers.map((l, i) => {
+                const v = l.probs[k]
+                const share = l.hidden ? 0.55 : Math.sqrt(v / scale)
+                const travel = travels[i]
+                // after a step, ghosts leaving a room shrink at once; arriving ones grow as the travellers land
+                const arriving = travel != null && v > travel.from[k] + 1e-9
+                const ghost: CSSProperties = {
+                  left: pair ? `${spot[i]}%` : undefined,
+                  width: there[i] ? `${lo + hi * share}%` : '0%',
+                  opacity: there[i] ? 0.5 + 0.5 * share : 0,
+                  transitionDuration: travel ? (arriving ? '520ms' : '280ms') : undefined,
+                  transitionDelay: arriving ? `${Math.round(TRAVEL_MS * 0.55)}ms` : '0ms',
+                }
+                return (
+                  <span key={i} className="slot-ghost" style={ghost}>
+                    {/* fog hides a lone ghost's colour too; a pair keeps theirs to tell them apart */}
+                    <Ghost tone={l.hidden && !pair ? 'white' : l.tone} />
+                  </span>
+                )
+              })}
               {votes > 0 && <span className={`slot-count ${votes === most ? 'is-top' : ''}`}>{votes}</span>}
-              {k === empty && <span className="slot-tag">empty</span>}
-              {k === found && <span className="slot-tag is-light">caught</span>}
+              {k === empty && !caught && <span className="slot-tag">empty</span>}
+              {caught && <span className="slot-tag is-light">caught</span>}
             </button>
             <span className={`slot-label ${side}`} style={{ ...at(radius + slot / 2 + (side ? 1.8 : 3.4)), ...enter }} aria-hidden="true">
               <b>{k + 1}</b>
               {/* keyed by value: a new number fades in, landing with the ghosts */}
-              {!hidden && p >= 0.0005 && (
-                <span key={pct(p)} className={travel ? 'pct-land' : undefined}>
-                  {pct(p)}
-                </span>
-              )}
+              {label &&
+                layers.map((l, i) =>
+                  l.hidden ? null : (
+                    <span key={`${i}:${pct(l.probs[k])}`} className={[travels[i] && 'pct-land', pair && `pct-${l.tone}`].filter(Boolean).join(' ') || undefined}>
+                      {pct(l.probs[k])}
+                    </span>
+                  ),
+                )}
             </span>
           </div>
         )
       })}
-      {travel && <Travel key={`travel:${travel.id}`} from={travel.from} tone={tone} radius={radius} slot={slot} />}
+      {travels.map(
+        (t, i) =>
+          t && (
+            <Travel
+              key={`travel:${i}:${t.id}`}
+              from={t.from}
+              tone={layers[i].tone}
+              radius={radius}
+              slot={slot}
+              dx={((spot[i] - 50) / 100) * slot}
+              fit={hi / 66}
+            />
+          ),
+      )}
       <div className="ring-centre">{children}</div>
     </div>
   )

@@ -6,7 +6,6 @@ import { JoinView } from './views/JoinView'
 import { StartView } from './views/StartView'
 import { TutorialView } from './views/TutorialView'
 
-// One table for routes and pages, so a route can never lack its page.
 const VIEWS = {
   '#/play': GameView,
   '#/tutorial': TutorialView,
@@ -22,7 +21,7 @@ const readRoute = (): Route => {
   const known = (Object.keys(VIEWS) as (keyof typeof VIEWS)[]).find((r) => h.startsWith(r))
   if (known) return known
   if (h === '' || h === '#' || h === '#/') return 'start'
-  return '#/docs' // in-page anchors (#how, #real-chip, ...) live on the docs page
+  return '#/docs'
 }
 
 export function App() {

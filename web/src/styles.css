@@ -877,6 +877,44 @@ details.panel-card:not([open]) {
   background: var(--light);
 }
 
+/* both ghosts at once: two ghosts share every room, one scale for both */
+
+.tab-pair {
+  display: flex;
+}
+
+.tab-pair .tab-ghost + .tab-ghost {
+  margin-left: -5px;
+}
+
+.slot-label .pct-quantum {
+  color: var(--quantum);
+}
+
+.slot-label .pct-classical {
+  color: var(--classical);
+}
+
+.pair-key {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 14px;
+  color: var(--ink-2);
+  font-size: 13px;
+}
+
+.pair-key > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pair-key em {
+  color: var(--ink-3);
+  font-style: normal;
+}
+
 /* docs */
 
 /* name and Play pinned to the top corners, sections listed down the left */
@@ -1070,24 +1108,6 @@ details.panel-card:not([open]) {
 
 .hero p {
   color: var(--ink-2);
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 18px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.chips li {
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: var(--surface-2);
-  color: var(--ink-2);
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
 }
 
 .board {
@@ -1358,43 +1378,39 @@ td {
 
 /* group play: Play online button, host screen, phone */
 
-.top-right {
+.top-right,
+.top-left {
   position: absolute;
   top: 24px;
-  right: 24px;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   animation: fade 600ms ease-out 100ms both;
 }
 
-.corner-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
+.top-right {
+  right: 24px;
 }
 
-.corner-stack > .panel-card {
-  align-self: stretch;
+.top-left {
+  left: 24px;
+}
+
+.pill-icon {
+  width: 36px;
+  padding: 0;
+}
+
+.pill-icon svg {
+  width: 18px;
+  height: 18px;
 }
 
 .corner-actions {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.only-stacked {
-  display: none;
-}
-
-@media (max-width: 1180px), (max-height: 700px) {
-  .only-stacked {
-    display: contents;
-  }
-
-  .only-wide {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
@@ -1546,6 +1562,16 @@ td {
 
 .wordmark-small {
   font-size: 20px;
+  white-space: nowrap;
+}
+
+.phone-head .corner-actions {
+  gap: 6px;
+}
+
+.phone-head .pill-icon {
+  width: 32px;
+  min-height: 32px;
 }
 
 .phone-me {

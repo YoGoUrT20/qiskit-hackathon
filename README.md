@@ -1,4 +1,16 @@
-# Ghost Walk
+<h1 align="center">Ghost Walk: a quantum ghost hunt</h1>
+
+<p align="center">
+  <img src="docs/logo.svg" width="128" alt="A blue quantum ghost and an orange coin-flipping ghost">
+</p>
+
+<p align="center">
+  <a href="https://ghost.yogourt.dev"><img alt="Play now" src="https://img.shields.io/badge/play-ghost.yogourt.dev-6f86ff?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA3MiI%2BPHBhdGggZD0iTTggMzRDOCAxNyAxOC41IDYgMzIgNnMyNCAxMSAyNCAyOHYzMGMwIDIuNC0yLjYgMy42LTQuNCAyLjFMNDYgNjEuNWwtNS43IDQuOGEzLjUgMy41IDAgMCAxLTQuNiAwTDMyIDYzbC0zLjcgMy4zYTMuNSAzLjUgMCAwIDEtNC42IDBMMTggNjEuNWwtNS42IDQuNkMxMC42IDY3LjYgOCA2Ni40IDggNjR6IiBmaWxsPSIjZTRlOGZmIi8%2BPGVsbGlwc2UgY3g9IjI0IiBjeT0iMzMiIHJ4PSI0IiByeT0iNS41IiBmaWxsPSIjNTU1Ii8%2BPGVsbGlwc2UgY3g9IjQwIiBjeT0iMzMiIHJ4PSI0IiByeT0iNS41IiBmaWxsPSIjNTU1Ii8%2BPC9zdmc%2B&logoColor=white"></a>
+  <picture><img alt="Made with Qiskit" src="https://img.shields.io/badge/made%20with-Qiskit-6929c4?style=for-the-badge&logo=qiskit&logoColor=white"></picture>
+  <a href="docs/real-chip.md"><img alt="Ran on ibm_kingston" src="https://img.shields.io/badge/ran%20on-ibm__kingston-21a88a?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA3MiI%2BPHBhdGggZD0iTTggMzRDOCAxNyAxOC41IDYgMzIgNnMyNCAxMSAyNCAyOHYzMGMwIDIuNC0yLjYgMy42LTQuNCAyLjFMNDYgNjEuNWwtNS43IDQuOGEzLjUgMy41IDAgMCAxLTQuNiAwTDMyIDYzbC0zLjcgMy4zYTMuNSAzLjUgMCAwIDEtNC42IDBMMTggNjEuNWwtNS42IDQuNkMxMC42IDY3LjYgOCA2Ni40IDggNjR6IiBmaWxsPSIjZDZmNmVjIi8%2BPGVsbGlwc2UgY3g9IjI0IiBjeT0iMzMiIHJ4PSI0IiByeT0iNS41IiBmaWxsPSIjNTU1Ii8%2BPGVsbGlwc2UgY3g9IjQwIiBjeT0iMzMiIHJ4PSI0IiByeT0iNS41IiBmaWxsPSIjNTU1Ii8%2BPC9zdmc%2B&logoColor=white"></a>
+  <picture><img alt="Qiskit Fall Fest 2026, Track 3" src="https://img.shields.io/badge/Qiskit%20Fall%20Fest-Track%203-e07133?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA3MiI%2BPHBhdGggZD0iTTggMzRDOCAxNyAxOC41IDYgMzIgNnMyNCAxMSAyNCAyOHYzMGMwIDIuNC0yLjYgMy42LTQuNCAyLjFMNDYgNjEuNWwtNS43IDQuOGEzLjUgMy41IDAgMCAxLTQuNiAwTDMyIDYzbC0zLjcgMy4zYTMuNSAzLjUgMCAwIDEtNC42IDBMMTggNjEuNWwtNS42IDQuNkMxMC42IDY3LjYgOCA2Ni40IDggNjR6IiBmaWxsPSIjZmZlM2NjIi8%2BPGVsbGlwc2UgY3g9IjI0IiBjeT0iMzMiIHJ4PSI0IiByeT0iNS41IiBmaWxsPSIjNTU1Ii8%2BPGVsbGlwc2UgY3g9IjQwIiBjeT0iMzMiIHJ4PSI0IiByeT0iNS41IiBmaWxsPSIjNTU1Ii8%2BPC9zdmc%2B&logoColor=white"></picture>
+  <a href="LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-8a8a93?style=for-the-badge"></a>
+</p>
 
 Hunt a quantum ghost that is spread over sixteen rooms at once. The ghost is a discrete-time quantum walk written in Qiskit, every flashlight is a projective measurement, and the same walk ran on **ibm_kingston**, a 156-qubit IBM Heron quantum computer.
 
@@ -17,7 +29,7 @@ Built for **Qiskit Fall Fest 2026 Warsaw**, Track 3: quantum games.
 
 ## The game
 
-A ghost hides in a corridor of 16 rooms that loops back on itself. It is a quantum ghost: it is not in one room but spread over many, it moves like a wave, and its waves can cancel each other out. You have four flashlights.
+A ghost hides in a corridor of 16 rooms that loops back on itself. It is a quantum ghost: it is not in one room but spread over many, it moves like a wave, and its waves can cancel each other out. You have five flashlights.
 
 1. **Read the ghosts.** Each room shows your exact chance of catching the ghost there. The ghost started in room 8 and has already taken seven steps.
 2. **Search a room.** Click it. If the ghost is there, you win. If not, that room empties and every other room grows, because the ghost must be somewhere else.
@@ -31,15 +43,16 @@ The player never sees a circuit or an equation. Qiskit is the physics engine und
 | Rules | Quantum: best room | Quantum: random room* | Coin-flip: best room | Coin-flip: random room* |
 |---|---|---|---|---|
 | Before: 4 flashlights, 3 warm-up steps | 88.3 % | 62.8 % | 81.3 % | 63.0 % |
-| **Now: 4 flashlights, 7 warm-up steps** | **64.0 %** | **41.3 %** | **68.5 %** | **41.3 %** |
+| Then: 4 flashlights, 7 warm-up steps | 64.0 % | 41.3 % | 68.5 % | 41.3 % |
+| **Now: 5 flashlights, 7 warm-up steps** | **71.1 %** | **48.6 %** | **74.7 %** | **48.6 %** |
 
-\* a random room that can still hold the ghost; any of the 16 rooms at random wins 23 %.
+\* a random room that can still hold the ghost; any of the 16 rooms at random wins 28 %.
 
-With three warm-up steps the ghost sat in only four rooms, so good play nearly always won and the choices hardly mattered. After seven steps it covers eight rooms, the quantum ghost already shows its two peaks running apart, good play wins about two hunts in three, and it beats random play by 23 points. More flashlights were not the fix: at 3 warm-up steps even 4 flashlights win 88 % for good play. The quantum ghost is now the harder one (64 % against 68.5 %), because it runs away faster. Solo and group play use the same rules ([`web/src/game/rules.ts`](web/src/game/rules.ts)).
+With three warm-up steps the ghost sat in only four rooms, so good play nearly always won and the choices hardly mattered. After seven steps it covers eight rooms, the quantum ghost already shows its two peaks running apart, good play wins about two hunts in three, and it beats random play by 23 points. More flashlights were not the fix for that: at 3 warm-up steps even 4 flashlights win 88 % for good play. With 7 warm-up steps the hunt then felt too hard for new players, so a fifth flashlight lifts good play to 71–75 % and random play to about half, still 22–26 points apart. The quantum ghost is the harder one (71 % against 75 %), because it runs away faster. Solo and group play use the same rules ([`web/src/game/rules.ts`](web/src/game/rules.ts)).
 
 **Also in the game**
 
-- **Play online** (top right): the hunt as a room vote, built for a showcase. The big screen shows a QR code, a four-digit game code and the ring with live vote counts; 30–100 people join on their phones and vote for the room to search each turn. When the countdown ends (or the host closes the vote) the most-voted room gets the flashlight, a tie is drawn at random, and the ghost steps. The ghost's amplitudes, every flashlight and every random roll live on the server, so every screen sees the same ghost and nobody can cheat from a phone. Details in [web/README.md](web/README.md#online-group-play).
+- **Play online** (next to Docs on the hunt): the hunt as a room vote, built for a showcase. The big screen shows a QR code, a four-digit game code and the ring with live vote counts; 30–100 people join on their phones and vote for the room to search each turn. When the countdown ends (or the host closes the vote) the most-voted room gets the flashlight, a tie is drawn at random, and the ghost steps. The ghost's amplitudes, every flashlight and every random roll live on the server, so every screen sees the same ghost and nobody can cheat from a phone. Details in [web/README.md](web/README.md#online-group-play).
 - **Tutorial** (`#/tutorial`): seven short screens. The ghost starts alone in room 1, splits left and right, and at step four the waves cancel. Ends with a practice flashlight.
 - **Quantum / coin-flip toggle**: the same hunt with a classical random-walk ghost, so players can feel the difference.
 - **Fog**: hides the chances, so you have to predict where the waves went.
@@ -111,7 +124,7 @@ python -m venv .venv
 ```python
 from quantum_walk import ghost_walk, ideal_probs, classical_probs
 
-ideal_probs(4)       # exact room probabilities of the quantum ghost after 4 steps, 16 rooms
+ideal_probs(4)       # room probabilities of the quantum ghost after 4 steps, 16 rooms
 classical_probs(4)   # the coin-flipping ghost
 ghost_walk(5, 3)     # the circuit: 8-room ring, 5 steps, room register measured
 ```
@@ -129,7 +142,7 @@ python run_on_ibm.py submit --fake        # results in hardware/results_fake.jso
 Needs an [IBM Quantum Platform](https://quantum.cloud.ibm.com) account saved with `QiskitRuntimeService.save_account(...)`. The free Open Plan gives 10 minutes of QPU time per 28 days; one full job costs about 10 s.
 
 ```bash
-python run_on_ibm.py submit --backend ibm_kingston --dry-run   # transpile and print the plan, send nothing
+python run_on_ibm.py submit --backend ibm_kingston --dry-run   # print the plan, send nothing
 python run_on_ibm.py submit --backend ibm_kingston --tag mine  # one job; id saved to hardware/job_mine.json
 python run_on_ibm.py fetch --tag mine --wait                   # results to hardware/results_mine.json
 cd web && npm run sync-data                                    # show results.json / results_rerun.json in the game
@@ -188,16 +201,13 @@ ghost-walk.md                the plan written at the start of the hackathon
 | Tutorial notebook | done |
 | Noise slider (simulator with a real chip's noise model) | not built; the real-chip section shows measured noise instead |
 | Audience voting (online group play, QR join, server-side ghost) | done, live at https://ghost.yogourt.dev |
-| Rules tuned by simulation | done: 7 warm-up steps, good play wins 64–68.5 % |
-| 2-player mode, 2D mansion, Polish translation | not built |
+| Rules tuned by simulation | done: 7 warm-up steps, 5 flashlights, good play wins 71–75 % |
 
 ## Related work
 
 | Project | Difference |
 |---|---|
-| [Merry Qhristmas](https://mariaisfan.itch.io/merry-qhristmas) | Closest mechanic: a quantum walk on a grid that collapses when observed. Cirq prototype; no partial yes/no measurements, no classical comparison, no real hardware. |
 | [Schrödinger cat and hounds](https://cris.iucc.ac.il/en/publications/quantum-computer-games-schr%C3%B6dinger-cat-and-hounds-2/) (Gordon & Gordon, 2012) | Quantum board game; not a measurement hunt on a quantum walk. |
-| [Quantum Ghost Hunt](https://quantumgames.aalto.fi/game-quantum-ghost-hunt/) (Aalto, 2020) | Same theme, different game: you are the ghost escaping photons. |
 | [Qubit the Barbarian](https://exca.itch.io/qubit-the-barbarian) | Dungeon game with measurement; different mechanic. |
 
 New here: a flashlight that is a partial yes/no measurement which reshapes the wave and so changes all future interference, a side-by-side classical ghost, and the same game state measured on real IBM hardware with every shot published.

@@ -14,12 +14,11 @@ const BODY =
 
 interface Props {
   tone: Tone
-  /** draw only a dashed outline: a room where the ghost cannot be */
+  // draw only a dashed outline
   outline?: boolean
   className?: string
 }
 
-/** A ghost: rounded head, scalloped hem, two eyes. Scales to its box. */
 export function Ghost({ tone, outline, className }: Props) {
   const id = useId()
   const [top, bottom] = FILL[tone]

@@ -1,13 +1,9 @@
-// The ghost: a discrete-time quantum walk on a ring, the same unitary as
-// ../../quantum_walk.py (Hadamard coin, coin 0 -> room - 1, coin 1 -> room + 1,
-// start coin (|0> + i|1>)/sqrt(2)). Amplitudes are stored per room and coin.
-
 export type Mode = 'quantum' | 'classical'
 
 export interface Ghost {
   mode: Mode
   rooms: number
-  // quantum: amplitude re/im for coin 0 and coin 1; classical: only `p` is used
+  // quantum: re/im of amplitude for coin 0 and coin 1, in classical only `p` is used
   re0: number[]
   im0: number[]
   re1: number[]
@@ -18,7 +14,7 @@ export interface Ghost {
 const S = Math.SQRT1_2
 const zeros = (n: number) => new Array<number>(n).fill(0)
 
-/** 0-based start index: 7 (room 8) for 16 rooms, 3 (room 4) for 8. */
+// start at index 7 (room 8) for 16 rooms, 3 (room 4) for 8
 export const startRoom = (rooms: number) => rooms / 2 - 1
 
 export function newGhost(mode: Mode, rooms = 16, warmup = 3, s = startRoom(rooms)): Ghost {
@@ -53,7 +49,7 @@ export function probs(g: Ghost): number[] {
   return g.re0.map((_, k) => g.re0[k] ** 2 + g.im0[k] ** 2 + g.re1[k] ** 2 + g.im1[k] ** 2)
 }
 
-/** Projective measurement outcome: keep only rooms where `keep` is true, renormalise. */
+// projective outcome, keep only rooms where `keep` is true, renormalise
 export function project(g: Ghost, keep: (room: number) => boolean): Ghost {
   if (g.mode === 'classical') {
     const p = g.p.map((v, k) => (keep(k) ? v : 0))
@@ -67,13 +63,13 @@ export function project(g: Ghost, keep: (room: number) => boolean): Ghost {
   return { ...kept, re0: scale(kept.re0), im0: scale(kept.im0), re1: scale(kept.re1), im1: scale(kept.im1) }
 }
 
-/** What a coin-flipping ghost would do with these chances: the "no interference" baseline. */
+// What a coin-flipping ghost would do with these chances
 export function classicalStep(p: number[]): number[] {
   const n = p.length
   return p.map((_, k) => (p[(k - 1 + n) % n] + p[(k + 1) % n]) / 2)
 }
 
-/** Draw a room from a distribution with a uniform number in [0, 1). */
+// draw a room from a distribution with a uniform number in [0, 1)
 export function sampleRoom(p: number[], roll: number): number {
   let r = roll
   for (let k = 0; k < p.length - 1; k++) {

@@ -1,5 +1,5 @@
-// Copies the real IBM runs (../hardware/results*.json) into a small file the site imports.
-// Run after every new hardware job:  npm run sync-data
+// copies the real IBM runs (../hardware/results*.json) into a small file the site imports.
+// run after every new hardware job:  npm run sync-data
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'

@@ -1,12 +1,14 @@
 // The hunt's rules, shared by solo play, group play (convex/) and the
 // simulation (scripts/simulate.ts). Tuned with that simulation: with 3 warm-up
 // steps the ghost sits in only four rooms and "always search the most likely
-// room" won 88% of quantum hunts. After 7 steps it covers eight rooms, the
-// quantum ghost already shows its two running peaks, and the same play wins
-// 64% (quantum) and 68.5% (coin-flip), against 41% for picking at random.
+// room" won 88% of quantum hunts. After 7 steps it covers eight rooms and the
+// quantum ghost already shows its two running peaks. With 4 flashlights the
+// same play won 64% (quantum) and 68.5% (coin-flip) and random play 41%,
+// which felt too hard for new players; 5 flashlights give 71% and 74.7%
+// against 48.6% for picking at random.
 
 export const ROOMS = 16
-export const LIGHTS = 4
+export const LIGHTS = 5
 export const WARMUP = 7
 
 // Group play (convex/games.ts): the crowd votes, the most-voted room is searched.

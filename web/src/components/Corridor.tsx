@@ -9,7 +9,7 @@ interface Props {
   onPick?: (room: number) => void
 }
 
-/** The ring cut open at room 16 / room 1 and laid flat, one bar per room. */
+// ring cut open at room 16 / room 1 and laid flat, one bar per room.
 export function Corridor({ probs, ink, hidden, lit, disabled, onPick }: Props) {
   const scale = Math.max(0.5, ...probs)
   return (

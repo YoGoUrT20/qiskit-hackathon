@@ -1,8 +1,3 @@
-// Checks the game codes in convex/codes.ts:   node scripts/codes-test.ts
-//   1. every code is four digits, and about 90% contain "67" at each of the three positions
-//   2. a code that an active game holds is never handed out again, and when every
-//      code is taken, creating a game fails instead of reusing one
-
 import assert from 'node:assert/strict'
 import { hasSixtySeven, pickCode, randomCode } from '../convex/codes.ts'
 
@@ -19,7 +14,6 @@ const share = with67 / N
 console.log(`${N.toLocaleString('en-GB')} codes: ${(100 * share).toFixed(2)}% contain 67 (67xx ${at[0]}, x67x ${at[1]}, xx67 ${at[2]})`)
 assert.ok(share > 0.89 && share < 0.915, 'about 90% should contain 67')
 
-// Collisions: mark most codes as taken by active games and draw many new ones.
 const taken = new Set<string>()
 for (let i = 0; i < 10_000; i++) {
   const code = String(i).padStart(4, '0')
@@ -40,12 +34,10 @@ for (let i = 0; i < 2_000; i++) {
 }
 console.log(`collisions: ${taken.size} codes active, 2000 new games, ${rejected} taken codes drawn and rejected, 0 handed out`)
 
-// Every code taken: must throw, never return a taken one.
 const all = async () => true
 await assert.rejects(pickCode(all), /No free game code/)
 console.log('all codes taken: create fails with "No free game code"')
 
-// The live check from the mutation, with a real active code: it is drawn and refused.
 let draws = 0
 const fixed = () => {
   draws++

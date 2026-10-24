@@ -14,7 +14,7 @@ interface Row {
   values: number[]
 }
 
-/** Small multiples: share of the ghost in rooms a perfect ghost can never be in, per step. */
+// share of the ghost in rooms a perfect ghost can never be in, per step
 export function LeakChart({ rows }: { rows: Row[] }) {
   const [hover, setHover] = useState<{ row: number; step: number } | null>(null)
   const plotH = H - TOP - BOTTOM

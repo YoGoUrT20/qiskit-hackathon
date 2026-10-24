@@ -5,9 +5,6 @@ import { StepArrows } from '../components/StepArrows'
 import { Ghost as Walker, Mode, newGhost, pct, probs, project } from '../engine/walk'
 import { LIGHTS, WARMUP, word } from '../game/rules'
 
-// A guided walk-through: the ghost starts alone in room 1 and the player
-// watches it split left and right, step by step, until the waves cancel.
-
 const ROOMS = 16
 const at = (steps: number, mode: Mode = 'quantum') => newGhost(mode, ROOMS, steps, 0)
 

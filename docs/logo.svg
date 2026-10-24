@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c1c22"/>
+      <stop offset="1" stop-color="#0b0b0c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#6f86ff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#6f86ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="quantum" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e4e8ff"/>
+      <stop offset="1" stop-color="#8b9cff"/>
+    </linearGradient>
+    <linearGradient id="classical" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe3cc"/>
+      <stop offset="1" stop-color="#ec8648"/>
+    </linearGradient>
+    <path id="body" d="M8 34C8 17 18.5 6 32 6s24 11 24 28v30c0 2.4-2.6 3.6-4.4 2.1L46 61.5l-5.7 4.8a3.5 3.5 0 0 1-4.6 0L32 63l-3.7 3.3a3.5 3.5 0 0 1-4.6 0L18 61.5l-5.6 4.6C10.6 67.6 8 66.4 8 64z"/>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#tile)"/>
+  <circle cx="128" cy="128" r="96" fill="none" stroke="#3b3b46" stroke-width="2.5" stroke-dasharray="7 7"/>
+  <circle cx="114" cy="122" r="92" fill="url(#glow)"/>
+  <g transform="translate(146 104) scale(1.35)">
+    <use href="#body" fill="url(#classical)"/>
+    <ellipse cx="24" cy="33" rx="3.6" ry="5" fill="#0b0b0c"/>
+    <ellipse cx="40" cy="33" rx="3.6" ry="5" fill="#0b0b0c"/>
+  </g>
+  <g transform="translate(44 42) scale(2.2)">
+    <use href="#body" fill="url(#quantum)"/>
+    <ellipse cx="24" cy="33" rx="3.6" ry="5" fill="#0b0b0c"/>
+    <ellipse cx="40" cy="33" rx="3.6" ry="5" fill="#0b0b0c"/>
+  </g>
+</svg>

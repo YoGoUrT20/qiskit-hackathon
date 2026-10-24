@@ -1,19 +1,3 @@
-// Deploy Ghost Walk: Convex functions to the self-hosted backend, then the
-// static site to the server.
-//
-//   npm run deploy                 # both
-//   npm run deploy -- --site       # only the static site
-//   npm run deploy -- --convex     # only the Convex functions
-//
-// Reads web/.env.local (never committed):
-//   CONVEX_SELF_HOSTED_URL, CONVEX_SELF_HOSTED_ADMIN_KEY   used by `npx convex deploy`
-//   VITE_CONVEX_URL                                        baked into the build
-//   DEPLOY_HOST=user@host                                  ssh target
-//   DEPLOY_PUTTY_SESSION=my-server                         optional: use plink/pscp with this saved PuTTY session
-//
-// The site goes to /var/www/ghost/releases/<time> and /var/www/ghost/current
-// is switched to it in one step; the last five releases are kept.
-
 import { spawnSync } from 'node:child_process'
 import { existsSync, readFileSync, rmSync } from 'node:fs'
 
@@ -38,7 +22,6 @@ function run(cmd, cmdArgs, opts = {}) {
   }
 }
 
-// a saved PuTTY session already names the server, so plink only takes the user
 const remote = (script) =>
   putty ? run('plink', ['-batch', '-load', putty, '-l', host.split('@')[0], script]) : run('ssh', [host, script])
 const upload = (file, dest) =>

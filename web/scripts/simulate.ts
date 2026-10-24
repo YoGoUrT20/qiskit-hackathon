@@ -1,20 +1,9 @@
-// Win rates for the hunt rules, over the real engine in src/engine/walk.ts.
-//
-//   npm run simulate                    # the old rules, the current rules (src/game/rules.ts), and a grid
-//   node scripts/simulate.ts 6 3        # one rule set: 6 flashlights, 3 warm-up steps
-//
-// A turn is the game's turn: shine one flashlight (caught with probability
-// P(room), otherwise project the room out and renormalise), then, if a
-// flashlight is left, one walk step. Greedy play is exact: a miss is
-// deterministic, so the only branching is a tie between equally likely rooms,
-// which is averaged over. Random play is Monte Carlo with a fixed seed.
-
 import { type Ghost, type Mode, newGhost, probs, project, step } from '../src/engine/walk.ts'
 import { LIGHTS, WARMUP } from '../src/game/rules.ts'
 
 type Policy = 'greedy' | 'random-possible' | 'random-any'
 
-/** Exact win probability for "search the most likely room", ties split evenly. */
+// exact win probability for "search the most likely room", ties split evenly.
 function greedyWin(g: Ghost, lights: number): number {
   const p = probs(g)
   const top = Math.max(...p)
@@ -64,7 +53,6 @@ function randomWin(mode: Mode, lights: number, warmup: number, policy: Policy, g
 
 const pct = (x: number) => `${(100 * x).toFixed(1)}%`.padStart(6)
 
-/** greedy win rate only: exact and fast, for the grid */
 const greedyCell = (mode: Mode, lights: number, warmup: number) => `${Math.round(100 * greedyWin(newGhost(mode, 16, warmup), lights))}`.padStart(4)
 
 function row(lights: number, warmup: number, games: number) {
