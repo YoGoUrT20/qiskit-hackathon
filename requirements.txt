@@ -1,0 +1,10 @@
+# tested with Python 3.11 and the versions below
+qiskit>=2.6
+qiskit-ibm-runtime>=0.50
+qiskit-aer>=0.18        # local noisy runs: run_on_ibm.py submit --fake
+rustworkx>=0.18
+numpy>=2.0
+
+# tutorial notebook
+matplotlib>=3.10
+ipykernel>=7.0

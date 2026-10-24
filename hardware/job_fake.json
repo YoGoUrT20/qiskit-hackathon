@@ -1,0 +1,210 @@
+{
+  "job_id": "2508d0c4-9ed0-442a-9ab5-a5a2c46e1312",
+  "backend": "fake_torino",
+  "instance": null,
+  "fake": true,
+  "submitted_utc": "2026-10-23T18:41:11+00:00",
+  "shots": 2000,
+  "circuits": [
+    {
+      "rooms": 16,
+      "steps": 1,
+      "two_qubit_gates": 60,
+      "depth": 197,
+      "physical_qubits": [
+        80,
+        99,
+        98,
+        92,
+        100
+      ]
+    },
+    {
+      "rooms": 16,
+      "steps": 2,
+      "two_qubit_gates": 124,
+      "depth": 411,
+      "physical_qubits": [
+        80,
+        99,
+        98,
+        92,
+        100
+      ]
+    },
+    {
+      "rooms": 16,
+      "steps": 3,
+      "two_qubit_gates": 187,
+      "depth": 613,
+      "physical_qubits": [
+        80,
+        99,
+        98,
+        92,
+        100
+      ]
+    },
+    {
+      "rooms": 16,
+      "steps": 4,
+      "two_qubit_gates": 249,
+      "depth": 824,
+      "physical_qubits": [
+        107,
+        87,
+        89,
+        94,
+        88
+      ]
+    },
+    {
+      "rooms": 16,
+      "steps": 5,
+      "two_qubit_gates": 315,
+      "depth": 1041,
+      "physical_qubits": [
+        80,
+        99,
+        98,
+        92,
+        100
+      ]
+    },
+    {
+      "rooms": 16,
+      "steps": 6,
+      "two_qubit_gates": 377,
+      "depth": 1252,
+      "physical_qubits": [
+        107,
+        87,
+        89,
+        94,
+        88
+      ]
+    },
+    {
+      "rooms": 16,
+      "steps": 7,
+      "two_qubit_gates": 441,
+      "depth": 1466,
+      "physical_qubits": [
+        107,
+        87,
+        89,
+        94,
+        88
+      ]
+    },
+    {
+      "rooms": 16,
+      "steps": 8,
+      "two_qubit_gates": 507,
+      "depth": 1683,
+      "physical_qubits": [
+        80,
+        99,
+        98,
+        92,
+        100
+      ]
+    },
+    {
+      "rooms": 8,
+      "steps": 1,
+      "two_qubit_gates": 16,
+      "depth": 54,
+      "physical_qubits": [
+        37,
+        32,
+        33,
+        31
+      ]
+    },
+    {
+      "rooms": 8,
+      "steps": 2,
+      "two_qubit_gates": 32,
+      "depth": 106,
+      "physical_qubits": [
+        37,
+        32,
+        33,
+        31
+      ]
+    },
+    {
+      "rooms": 8,
+      "steps": 3,
+      "two_qubit_gates": 48,
+      "depth": 159,
+      "physical_qubits": [
+        37,
+        32,
+        33,
+        31
+      ]
+    },
+    {
+      "rooms": 8,
+      "steps": 4,
+      "two_qubit_gates": 64,
+      "depth": 212,
+      "physical_qubits": [
+        37,
+        32,
+        33,
+        31
+      ]
+    },
+    {
+      "rooms": 8,
+      "steps": 5,
+      "two_qubit_gates": 80,
+      "depth": 265,
+      "physical_qubits": [
+        37,
+        32,
+        33,
+        31
+      ]
+    },
+    {
+      "rooms": 8,
+      "steps": 6,
+      "two_qubit_gates": 94,
+      "depth": 315,
+      "physical_qubits": [
+        66,
+        65,
+        63,
+        64
+      ]
+    },
+    {
+      "rooms": 8,
+      "steps": 7,
+      "two_qubit_gates": 110,
+      "depth": 368,
+      "physical_qubits": [
+        66,
+        65,
+        63,
+        64
+      ]
+    },
+    {
+      "rooms": 8,
+      "steps": 8,
+      "two_qubit_gates": 128,
+      "depth": 424,
+      "physical_qubits": [
+        37,
+        32,
+        33,
+        31
+      ]
+    }
+  ]
+}
