@@ -207,7 +207,7 @@ ghost-walk.md                the plan written at the start of the hackathon
 
 | Project | Difference |
 |---|---|
-| [Schrödinger cat and hounds](https://cris.iucc.ac.il/en/publications/quantum-computer-games-schr%C3%B6dinger-cat-and-hounds-2/) (Gordon & Gordon, 2012) | Quantum board game; not a measurement hunt on a quantum walk. |
+| [Schrödinger cat and hounds](https://iopscience.iop.org/article/10.1088/0031-9120/47/3/346) (Gordon & Gordon, 2012) | Quantum board game; not a measurement hunt on a quantum walk. |
 | [Qubit the Barbarian](https://exca.itch.io/qubit-the-barbarian) | Dungeon game with measurement; different mechanic. |
 
 New here: a flashlight that is a partial yes/no measurement which reshapes the wave and so changes all future interference, a side-by-side classical ghost, and the same game state measured on real IBM hardware with every shot published.

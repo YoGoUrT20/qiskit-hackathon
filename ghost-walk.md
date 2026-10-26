@@ -419,5 +419,5 @@ Credit these in the presentation and state clearly what is new.
 - [IBM Quantum pricing](https://www.ibm.com/quantum/pricing)
 - [Merry Qhristmas](https://mariaisfan.itch.io/merry-qhristmas)
 - [Quantum Ghost Hunt, Aalto](https://quantumgames.aalto.fi/game-quantum-ghost-hunt/)
-- [Schrödinger cat and hounds](https://cris.iucc.ac.il/en/publications/quantum-computer-games-schr%C3%B6dinger-cat-and-hounds-2/)
+- [Schrödinger cat and hounds](https://iopscience.iop.org/article/10.1088/0031-9120/47/3/346)
 - [Qubit the Barbarian](https://exca.itch.io/qubit-the-barbarian)
