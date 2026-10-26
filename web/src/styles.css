@@ -1249,7 +1249,13 @@ details.panel-card:not([open]) {
 .readout {
   color: var(--ink-2);
   font-size: 13px;
+  line-height: 1.5;
   font-variant-numeric: tabular-nums;
+}
+
+/* own row, so the longer hover text never wraps under the legend and pushes the chart down */
+.chart-head .readout {
+  flex-basis: 100%;
 }
 
 .chart-svg,
@@ -1762,6 +1768,11 @@ td {
 
   .panel {
     padding: 18px 12px;
+  }
+
+  /* hover text takes two lines on phones, so keep room for both */
+  .readout {
+    min-height: 3em;
   }
 
   .corridor-pct {
